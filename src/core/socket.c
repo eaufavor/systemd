@@ -2738,7 +2738,8 @@ static int socket_deserialize_item(Unit *u, const char *key, const char *value, 
                         log_unit_debug(u, "Failed to parse socket value: %s", value);
                 else
                         LIST_FOREACH(port, p, s->ports)
-                                if (socket_address_is(&p->address, value+skip, type)) {
+                                if (p->fd < 0 &&
+                                    socket_address_is(&p->address, value+skip, type)) {
                                         socket_port_take_fd(p, fds, fd);
                                         break;
                                 }
